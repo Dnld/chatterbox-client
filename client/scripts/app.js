@@ -1,3 +1,6 @@
+// Get username
+var userName = window.prompt("Please enter your username");
+
 var $chatFeed = $('.chat');
 var recentMessageId;
 
@@ -10,14 +13,16 @@ var displayMessages = function(data) {
   // Eliminate previously displayed messages
   if (recentMessageId !== undefined) {
     for (i = 0; i < messages.length; i++) {
+      console.log('i = ',i);
       if (messages[i].objectId === recentMessageId) {
-        messages.splice(i, messages.length);
+        messages.splice(0, i+1);
+        break;
       }
     }
   }
 
   // add messages to document in reverse chronological order
-  for (i = messages.length-1; i >= 0; i--) {
+  for (i = 0; i < messages.length; i++) {
     message = messages[i];
     var $date = ($.format.date(message.createdAt, 'MMM d h:mm:ss p'));
     var $newMessage = $('<div class="message"></div>');
@@ -48,3 +53,10 @@ var getMessages = function() {
 // Initialize feed and fetch messages every 1s
 getMessages();
 setInterval(getMessages, 1000);
+
+// Posting message
+$('.submit-btn').on('click', function(event){
+  event.preventDefault();
+  var $textInput = $(this).closest('form').find('textarea');
+  console.log($textInput.val());
+});
