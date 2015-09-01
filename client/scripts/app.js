@@ -91,3 +91,12 @@ $('.submit-btn').on('click', function(event){
   // immediately updates feed upon submit click
   getMessages();
 });
+
+// filter messages by room
+var filterMessagesByRoom = function() {
+};
+
+$('.room-menu').change(function() {
+  var selectedRoom = $(this).val();
+
+});
