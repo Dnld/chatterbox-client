@@ -1,9 +1,9 @@
 // Initialize all global vars
-var userName          = window.prompt("Please enter your username");
 var $chatFeed         = $('.chat');
+var friends           = [];
 var rooms             = [];
 var selectedRoom      = 'All';
-var friends           = [];
+var userName          = window.prompt("Please enter your username");
 var recentMessageId;
 
 
@@ -134,19 +134,26 @@ var filterMessagesByRoom = function(roomName) {
   });
 };
 
-// On user selection of Room
+
+// Listener to add a new room
+// or change room
 $('.room-menu').change(function() {
   selectedRoom = $(this).val();
 
+  // runs when user selects to create new room
   if (selectedRoom === 'add-room') {
     selectedRoom = window.prompt("Please enter new room name");
     updateRooms(selectedRoom);
     $('.rooms select').val('' + _.escape(selectedRoom));
   }
 
+  // filter displayed messages by selected room
   filterMessagesByRoom(_.escape(selectedRoom));
 });
 
+
+// Apply/Remove special css for messages
+// from friends vs rest of the users
 var highlightFriendsMessages = function() {
   $('.message').each(function(){
     if (friends.indexOf($(this).find('.username-link').text()) >= 0) {
@@ -157,13 +164,20 @@ var highlightFriendsMessages = function() {
   });
 };
 
+
+// Listener to allow user to add/remove friends
 $(document).on('click', '.username-link', function(event) {
-  event.preventDefault();
+  event.preventDefault();  // a jQuery necessity to prevent DOM reload
+
   var newFriend = $(this).text();
+
   if (friends.indexOf(newFriend) < 0) {
     friends.push(newFriend);
   } else {
     friends.splice(friends.indexOf(newFriend), 1);
   }
+
+  // Run the highlight method on newly
+  // updated friend's list
   highlightFriendsMessages();
 });
